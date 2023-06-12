@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using UnhollowerBaseLib;
 
 namespace LastEpoch_DatabaseGenerator.Db.Json
 {

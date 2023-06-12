@@ -1,5 +1,4 @@
 ﻿using MelonLoader;
-using System.Linq;
 using UnityEngine;
 
 namespace LastEpoch_DatabaseGenerator
