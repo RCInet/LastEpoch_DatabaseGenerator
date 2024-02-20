@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LastEpoch_ExtractorMod", "LastEpoch_GameExtractorMod\LastEpoch_ExtractorMod.csproj", "{C877FD8D-AA76-4BFE-A184-B82BC878B704}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release_IL2CPP_Unhollower|Any CPU = Release_IL2CPP_Unhollower|Any CPU
+		Release_IL2CPP_Unhollower|x64 = Release_IL2CPP_Unhollower|x64
+		Release_IL2CPP_Unhollower|x86 = Release_IL2CPP_Unhollower|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Debug|x64.Build.0 = Debug|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Debug|x86.ActiveCfg = Debug|x86
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Debug|x86.Build.0 = Debug|x86
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release_IL2CPP_Unhollower|Any CPU.ActiveCfg = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release_IL2CPP_Unhollower|Any CPU.Build.0 = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release_IL2CPP_Unhollower|x64.ActiveCfg = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release_IL2CPP_Unhollower|x64.Build.0 = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release_IL2CPP_Unhollower|x86.ActiveCfg = Release|x86
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release_IL2CPP_Unhollower|x86.Build.0 = Release|x86
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release|x64.ActiveCfg = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release|x64.Build.0 = Release|Any CPU
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release|x86.ActiveCfg = Release|x86
+		{C877FD8D-AA76-4BFE-A184-B82BC878B704}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF231E11-7A65-4FA9-851F-65BB96EDCE50}
+	EndGlobalSection
+EndGlobal
