@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Linq;
 using UnityEngine;
 using UniverseLib;
 
@@ -8,7 +6,7 @@ namespace LastEpoch_GameExtractorMod.Data
 {
     public class Items
     {
-        public static bool ShowDebug = false;
+        public static bool ShowDebug = true;
         public static void Get()
         {
             Main.logger_instance.Msg("");
@@ -46,19 +44,19 @@ namespace LastEpoch_GameExtractorMod.Data
                     player = PlayerFinder.getPlayerActor();
                     //Functions.SaveObject(player);
                 }
-                catch { player = null; }                
+                catch { player = null; }
                 try
                 {
                     MasterItemList = RuntimeHelper.FindObjectsOfTypeAll(typeof(ItemList))[0].TryCast<ItemList>();
                     Functions.SaveObject(MasterItemList, "");
                 }
-                catch { MasterItemList = null; }                
+                catch { MasterItemList = null; }
                 try
                 {
                     uniqueList = Functions.GetObject("UniqueList").TryCast<UniqueList>();
                     Functions.SaveObject(uniqueList, "");
                 }
-                catch { uniqueList = null; }                
+                catch { uniqueList = null; }
             }
             /*internal static void SaveObject(Object obj)
             {
@@ -179,13 +177,11 @@ namespace LastEpoch_GameExtractorMod.Data
             public static System.Collections.Generic.List<string> GetUniqueMods(Il2CppSystem.Collections.Generic.List<UniqueModDisplayListEntry> display_list, string description, Il2CppSystem.Collections.Generic.List<UniqueItemMod> unique_mods)
             {
                 System.Collections.Generic.List<string> list_unique_affixs = new System.Collections.Generic.List<string>();
-                for (int z = 0; z < 8; z++) { list_unique_affixs.Add(""); }
-                //System.Collections.Generic.List<bool> list_roll = new System.Collections.Generic.List<bool>();
-                //for (int z = 0; z < 8; z++) { list_roll.Add(true); }
+                for (int z = 0; z < 8; z++) { list_unique_affixs.Add(""); }                
 
                 foreach (UniqueItemMod mod in unique_mods)
                 {
-                    string mod_string = TooltipItemManager.UniqueBasicModFormatter(null, mod.property, mod.type, mod.value, mod.tags, mod.specialTag, 0, TooltipItemManager.SlotType.STASH, 0);                          
+                    string mod_string = TooltipItemManager.UniqueBasicModFormatter(null, mod.property, mod.type, mod.value, mod.tags, mod.specialTag, 0, TooltipItemManager.SlotType.STASH, 0);
                     string formated_mod = mod_string;
                     if (mod_string.Contains(">")) { formated_mod = mod_string.Split('>')[1]; }
                     if (mod.canRoll)
@@ -236,36 +232,26 @@ namespace LastEpoch_GameExtractorMod.Data
                         {
                             if ((list_unique_affixs[mod.rollID] == "") | (list_unique_affixs[mod.rollID] == " "))
                             { list_unique_affixs[mod.rollID] = final_result; }
-                            else { list_unique_affixs[mod.rollID] += System.Environment.NewLine + final_result; }                            
+                            else { list_unique_affixs[mod.rollID] += System.Environment.NewLine + final_result; }
                         }
                     }
                     else
                     {
-                        //string result = formated_mod; // + " (cannot roll)";
-                        //if (mod.rollID < list_roll.Count) { list_roll[mod.rollID] = false; }
                         if (mod.rollID < list_unique_affixs.Count)
                         {
-                            //if (list_unique_affixs[mod.rollID] == "") { list_unique_affixs[mod.rollID] = " "; }
                             if (list_unique_affixs[mod.rollID] == "") { list_unique_affixs[mod.rollID] = formated_mod; }
                             else { list_unique_affixs[mod.rollID] += System.Environment.NewLine + formated_mod; }
                         }
                     }
                 }
                 System.Collections.Generic.List<string> final_list = new System.Collections.Generic.List<string>();
-                //int k = 0;
+                
                 foreach (string s in list_unique_affixs)
                 {
                     if (s != "")
                     {
                         final_list.Add(s);
-
-                        /*if (k < list_roll.Count)
-                        {
-                            if (list_roll[k]) { final_list.Add(s); }
-                            else { final_list.Add(s + System.Environment.NewLine + " (cannot roll)"); }
-                        }  */                      
                     }
-                    //k++;
                 }
                 return final_list;
             }
@@ -277,7 +263,6 @@ namespace LastEpoch_GameExtractorMod.Data
                     Unique = new System.Collections.Generic.List<Json.Unique>(),
                     Set = new System.Collections.Generic.List<Json.Set>()
                 };
-                //Il2CppSystem.Collections.Generic.List<ItemList.EquipmentItem> items = Refs.MasterItemList.GetEquipmentSubItems(type_id);
                 string basic_icon_path = path + @"Basic\";
                 if (type_id == 34) { basic_icon_path = path + @"Icons\"; }
                 foreach (var item in Refs.MasterItemList.GetEquipmentSubItems(type_id))
@@ -291,13 +276,19 @@ namespace LastEpoch_GameExtractorMod.Data
                         Level = item.levelRequirement,
                         Implicit = GetItemImplicits(item.implicits)
                     });
-
-                    if (Refs.player != null)
+                    ItemDataUnpacked new_item = new ItemDataUnpacked
                     {
-                        Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, type_id, item.subTypeID, 1, 0, 0, false, 0));
-                        if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, basic_icon_path); }
-                        Icon.sprite = null;
-                    }
+                        LvlReq = 0,
+                        classReq = ItemList.ClassRequirement.Any,
+                        itemType = (byte)type_id,
+                        subType = (ushort)item.subTypeID,
+                        rarity = 0,
+                        sockets = 0,
+                        uniqueID = 0
+                    };
+                    Icon.sprite = Icon.Get(new_item);
+                    if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, basic_icon_path); }
+                    Icon.sprite = null;                    
                 }
                 foreach (UniqueList.Entry ul_entry in Refs.uniqueList.uniques)
                 {
@@ -353,12 +344,19 @@ namespace LastEpoch_GameExtractorMod.Data
                             });
                             icon_path += @"Set\";
                         }
-                        if (Refs.player != null)
+                        ItemDataUnpacked new_item = new ItemDataUnpacked
                         {
-                            Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, type_id, ul_entry.subTypes[0], item_rarity, 0, ul_entry.uniqueID, false, 0));
-                            if (Icon.sprite != null) { Icon.Save(Icon.sprite, ul_entry.name, icon_path); }
-                            Icon.sprite = null;
-                        }
+                            LvlReq = 0,
+                            classReq = ItemList.ClassRequirement.Any,
+                            itemType = (byte)type_id,
+                            subType = (ushort)ul_entry.subTypes[0],
+                            rarity = (byte)item_rarity,
+                            sockets = 0,
+                            uniqueID = ul_entry.uniqueID
+                        };
+                        Icon.sprite = Icon.Get(new_item);
+                        if (Icon.sprite != null) { Icon.Save(Icon.sprite, ul_entry.name, icon_path); }
+                        Icon.sprite = null;
                     }
                 }
                 Save(new_list_item, type_name, path);
@@ -456,16 +454,22 @@ namespace LastEpoch_GameExtractorMod.Data
                 UnhollowerBaseLib.Il2CppReferenceArray<AffixList.MultiAffix> multi_affix = affix_list.multiAffixes;
                 int i = 0;
                 string icon_path = path + @"Icons\";
-                //Sprite item_sprite;
                 foreach (AffixList.SingleAffix a in single_affix)
                 {
                     Json.Affixs.Affix shard = SingleAffixToShard(a);
                     DB_Single_Affixs.List.Add(shard);
-                    if (Refs.player != null)
+                    ItemDataUnpacked new_item = new ItemDataUnpacked
                     {
-                        Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, type_id, a.affixId, 1, 0, 0, false, 0));
-                        if (Icon.sprite != null) { Icon.Save(Icon.sprite, a.affixName, icon_path); }
-                    }
+                        LvlReq = 0,
+                        classReq = ItemList.ClassRequirement.Any,
+                        itemType = (byte)type_id,
+                        subType = (ushort)a.affixId,
+                        rarity = 0,
+                        sockets = 0,
+                        uniqueID = 0
+                    };
+                    Icon.sprite = Icon.Get(new_item);
+                    if (Icon.sprite != null) { Icon.Save(Icon.sprite, a.affixName, icon_path); }
                     i++;
                 }
                 i = 0;
@@ -473,11 +477,18 @@ namespace LastEpoch_GameExtractorMod.Data
                 {
                     Json.Affixs.Affix shard = MultiAffixToShard(a);
                     DB_Multi_Affixs.List.Add(shard);
-                    if (Refs.player != null)
+                    ItemDataUnpacked new_item = new ItemDataUnpacked
                     {
-                        Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, type_id, a.affixId, 1, 0, 0, false, 0));
-                        if (Icon.sprite != null) { Icon.Save(Icon.sprite, a.affixName, icon_path); }
-                    }
+                        LvlReq = 0,
+                        classReq = ItemList.ClassRequirement.Any,
+                        itemType = (byte)type_id,
+                        subType = (ushort)a.affixId,
+                        rarity = 0,
+                        sockets = 0,
+                        uniqueID = 0
+                    };
+                    Icon.sprite = Icon.Get(new_item);
+                    if (Icon.sprite != null) { Icon.Save(Icon.sprite, a.affixName, icon_path); }
                     i++;
                 }
                 affixslist = new System.Collections.Generic.List<Json.Affixs.Affix>();
@@ -491,8 +502,6 @@ namespace LastEpoch_GameExtractorMod.Data
                 string final_string = "{ \"affix\": " + jsonString + " }";
                 Main.logger_instance.Msg("Found " + affixslist.Count + " Affixs");
                 Functions.VerifyDirectory(path, json_filename);
-                //if (System.IO.File.Exists(path + json_filename)) { System.IO.File.Delete(path + json_filename); }
-                //if (!System.IO.Directory.Exists(path)) { System.IO.Directory.CreateDirectory(path); }
                 System.IO.File.WriteAllText(path + json_filename, final_string);
             }
         }
@@ -530,12 +539,18 @@ namespace LastEpoch_GameExtractorMod.Data
                                 Id = item.subTypeID,
                                 Description = item.description
                             });
-
-                            if (Refs.player != null)
+                            ItemDataUnpacked new_item = new ItemDataUnpacked
                             {
-                                Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, base_id, item.subTypeID, 1, 0, 0, false, 0));
-                                if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
-                            }
+                                LvlReq = 0,
+                                classReq = ItemList.ClassRequirement.Any,
+                                itemType = (byte)base_id,
+                                subType = (ushort)item.subTypeID,
+                                rarity = 0,
+                                sockets = 0,
+                                uniqueID = 0
+                            };
+                            Icon.sprite = Icon.Get(new_item);
+                            if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
                         }
                         Save(path, json_filename);
                     }
@@ -546,8 +561,6 @@ namespace LastEpoch_GameExtractorMod.Data
                     string final_string = "{ \"rune\": " + jsonString + " }";
                     Main.logger_instance.Msg("Found " + Db_Runes.List.Count + " Runes");
                     Functions.VerifyDirectory(path, json_filename);
-                    //if (System.IO.File.Exists(path + json_filename)) { System.IO.File.Delete(path + json_filename); }
-                    //if (!System.IO.Directory.Exists(path)) { System.IO.Directory.CreateDirectory(path); }
                     System.IO.File.WriteAllText(path + json_filename, final_string);
                 }
             }
@@ -583,11 +596,18 @@ namespace LastEpoch_GameExtractorMod.Data
                                 Id = item.subTypeID,
                                 Description = item.description
                             });
-                            if (Refs.player != null)
+                            ItemDataUnpacked new_item = new ItemDataUnpacked
                             {
-                                Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, base_id, item.subTypeID, 1, 0, 0, false, 0));
-                                if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
-                            }
+                                LvlReq = 0,
+                                classReq = ItemList.ClassRequirement.Any,
+                                itemType = (byte)base_id,
+                                subType = (ushort)item.subTypeID,
+                                rarity = 0,
+                                sockets = 0,
+                                uniqueID = 0
+                            };
+                            Icon.sprite = Icon.Get(new_item);
+                            if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
                         }
                         Save(path, json_filename);
                     }
@@ -598,8 +618,6 @@ namespace LastEpoch_GameExtractorMod.Data
                     string final_string = "{ \"glyph\": " + jsonString + " }";
                     Main.logger_instance.Msg("Found " + Db_Glyphs.List.Count + " Glyphs");
                     Functions.VerifyDirectory(path, json_filename);
-                    //if (System.IO.File.Exists(path + json_filename)) { System.IO.File.Delete(path + json_filename); }
-                    //if (!System.IO.Directory.Exists(path)) { System.IO.Directory.CreateDirectory(path); }
                     System.IO.File.WriteAllText(path + json_filename, final_string);
                 }
             }
@@ -638,11 +656,18 @@ namespace LastEpoch_GameExtractorMod.Data
                             Timeline = 0,
                             Difficulty = 0
                         });
-                        if (Refs.player != null)
+                        ItemDataUnpacked new_item = new ItemDataUnpacked
                         {
-                            Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, base_id, item.subTypeID, 1, 0, 0, false, 0));
-                            if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.displayName, icon_path); }
-                        }
+                            LvlReq = 0,
+                            classReq = ItemList.ClassRequirement.Any,
+                            itemType = (byte)base_id,
+                            subType = (ushort)item.subTypeID,
+                            rarity = 0,
+                            sockets = 0,
+                            uniqueID = 0
+                        };
+                        Icon.sprite = Icon.Get(new_item);
+                        if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.displayName, icon_path); }
                     }
                     Save(path, json_filename);
                 }
@@ -653,8 +678,6 @@ namespace LastEpoch_GameExtractorMod.Data
                 string final_string = "{ \"blessings\": " + jsonString + " }";
                 Main.logger_instance.Msg("Found " + Db_Blessings.List.Count + " Blessings");
                 Functions.VerifyDirectory(path, json_filename);
-                //if (System.IO.File.Exists(path + json_filename)) { System.IO.File.Delete(path + json_filename); }
-                //if (!System.IO.Directory.Exists(path)) { System.IO.Directory.CreateDirectory(path); }
                 System.IO.File.WriteAllText(path + json_filename, final_string);
             }
         }
@@ -690,11 +713,18 @@ namespace LastEpoch_GameExtractorMod.Data
                             Id = item.subTypeID,
                             Description = item.description
                         });
-                        if (Refs.player != null)
+                        ItemDataUnpacked new_item = new ItemDataUnpacked
                         {
-                            Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, base_id, item.subTypeID, 1, 0, 0, false, 0));
-                            if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
-                        }
+                            LvlReq = 0,
+                            classReq = ItemList.ClassRequirement.Any,
+                            itemType = (byte)base_id,
+                            subType = (ushort)item.subTypeID,
+                            rarity = 0,
+                            sockets = 0,
+                            uniqueID = 0
+                        };
+                        Icon.sprite = Icon.Get(new_item);
+                        if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
                     }
                     Save(path, json_filename);
                 }
@@ -705,8 +735,6 @@ namespace LastEpoch_GameExtractorMod.Data
                 string final_string = "{ \"key\": " + jsonString + " }";
                 Main.logger_instance.Msg("Found " + Db_Keys.List.Count + " Keys");
                 Functions.VerifyDirectory(path, json_filename);
-                //if (System.IO.File.Exists(path + json_filename)) { System.IO.File.Delete(path + json_filename); }
-                //if (!System.IO.Directory.Exists(path)) { System.IO.Directory.CreateDirectory(path); }
                 System.IO.File.WriteAllText(path + json_filename, final_string);
             }
         }
@@ -742,11 +770,19 @@ namespace LastEpoch_GameExtractorMod.Data
                             Id = item.subTypeID,
                             Description = item.description
                         });
-                        if (Refs.player != null)
+
+                        ItemDataUnpacked new_item = new ItemDataUnpacked
                         {
-                            Icon.sprite = Icon.Get(Refs.player.generateItems.initialiseRandomItemData(false, 100, false, ItemLocationTag.None, base_id, item.subTypeID, 1, 0, 0, false, 0));
-                            if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
-                        }
+                            LvlReq = 0,
+                            classReq = ItemList.ClassRequirement.Any,
+                            itemType = (byte)base_id,
+                            subType = (ushort)item.subTypeID,
+                            rarity = 0,
+                            sockets = 0,
+                            uniqueID = 0
+                        };
+                        Icon.sprite = Icon.Get(new_item);
+                        if (Icon.sprite != null) { Icon.Save(Icon.sprite, item.name, icon_path); }
                     }
                     Save(path, json_filename);
                 }
@@ -757,8 +793,6 @@ namespace LastEpoch_GameExtractorMod.Data
                 string final_string = "{ \"memory\": " + jsonString + " }";
                 Main.logger_instance.Msg("Found " + Db_Memorys.List.Count + " Lost Memorys");
                 Functions.VerifyDirectory(path, json_filename);
-                //if (System.IO.File.Exists(path + json_filename)) { System.IO.File.Delete(path + json_filename); }
-                //if (!System.IO.Directory.Exists(path)) { System.IO.Directory.CreateDirectory(path); }
                 System.IO.File.WriteAllText(path + json_filename, final_string);
             }
         }
